@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
+import { JwtHelper } from 'angular2-jwt';
+import { MainService } from '../service/main.service';
+
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -7,12 +10,30 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HeaderComponent implements OnInit {
 
-  titel: string = 'ระบบคลังพัสดุ';
+  jwtHelper: JwtHelper = new JwtHelper();
 
-  constructor() {
+  titel: string = 'ระบบคลังพัสดุ';
+  loginPage: string;
+  regitPage: string;
+  profilePage: string;
+  logoutPage: string;
+  objPayload: Object;
+
+  constructor(
+    private mainService: MainService
+  ) {
   }
 
   ngOnInit() {
+    this.objPayload = this.mainService.isToken();
+    this.loginPage = this.mainService.loginPath('signin');
+    this.regitPage = this.mainService.loginPath('signup');
+    this.profilePage = this.mainService.loginPath('profile');
+    this.logoutPage = this.mainService.loginPath('logout');   
+  }
+
+  logout() {
+    this.mainService.logout();
   }
 
 }
